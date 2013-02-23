@@ -1,0 +1,4 @@
+examples
+========
+
+My JBoss examples
