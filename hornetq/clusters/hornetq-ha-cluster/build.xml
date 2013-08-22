@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="HornetQ-HA-Cluster" default="help" basedir=".">
+
+    <property environment="env" />
+    <property name="as.home" value="${env.JBOSS_HOME}"/>
+    <property file="${basedir}/build.properties"/>
+    <property name="asas" value="asas"/>
+
+	<target name="help" description="Prints out project description.">
+        <echo>
+                                ======= Short description =======
+
+        =======================================================================================================================================
+        Before using this script HornetQ switch.sh script has to be run to remove JBoss Messaging and install HornetQ in Jboss EAP installation
+        =======================================================================================================================================
+
+        This script builds a 2 node cluster, JBoss EAP 5 with HornetQ and HA.
+        This cluster has HA capabilities so there are two collocated back up servers.
+        The script also configures JBossTS for XA recovery. As of 2.2.10 release of HornetQ
+        there is no need to add HornetQ XA resource to the list of recovery resources in jbossts-properties.xml file.
+
+        The script uses 'all' profile to create two new profiles node-one and node-two (this can be changed in build.properties file).
+        Both nodes in the cluster bind to localhost on ports-01 and ports-02 (this is configurable se build.properties).
+
+        To create the cluster run the command ant create-cluster.
+        Run ant -p for more options.
+        </echo>
+    </target>
+    
+    <target name="validate-jboss">
+
+    	<fail unless="env.JBOSS_HOME" message="JBOSS_HOME environment variable not set! Set it and try again."/>
+    
+    </target>
+
+    <target name="create-cluster" depends="validate-jboss" description="Creates HornetQ HA cluster.">
+	
+		<echo message="Creates cluster node '${cluster.node.one}'."/>
+		<copy todir="${as.home}/server/${cluster.node.one}" verbose="false" description="Copies all profile">
+			<fileset dir="${as.home}/server/all" excludes="**/data/**"/>
+		</copy>
+		
+		<delete dir="${as.home}/server/${cluster.node.one}/deploy/hornetq"/>
+		
+		<copy todir="${as.home}/server/${cluster.node.one}/deploy/hornetq">
+			<fileset dir="${basedir}/resources/hornetq"/>
+		</copy>
+		
+		<copy tofile="${as.home}/bin/${cluster.node.one}.properties" file="./resources/bin/node-one.properties" overwrite="true"/>
+		
+		<echo message="Enableing admin user on node '${cluster.node.one}'."/>
+		<replace dir="${as.home}" token="#admin=admin" value="admin=admin">
+        	<include name="server/${cluster.node.one}/conf/props/jmx-console-users.properties"/>
+      	</replace>
+      
+        <echo message="Configuring XA recovery on node '${cluster.node.one}'."/>
+      	<replaceregexp file="${as.home}/server/${cluster.node.one}/conf/jbossts-properties.xml" 
+      	match="&lt;property\s*name=.com\.arjuna\.ats\.arjuna\.xa\.nodeIdentifier.\s*value=.1.\s*/&gt;" 
+      	replace="&lt;property name=&quot;com.arjuna.ats.arjuna.xa.nodeIdentifier&quot; value=&quot;${jboss.node.tx.id}&quot; /&gt;"/>
+        
+        <replaceregexp file="${as.home}/server/${cluster.node.one}/conf/jbossts-properties.xml"       
+        match="&lt;property\s*name=.com\.arjuna\.ats\.jta\.xaRecoveryNode.\s*value=.1.\s*/&gt;"
+        replace="&lt;property name=&quot;com.arjuna.ats.jta.xaRecoveryNode&quot; value=&quot;${jboss.node.tx.id}&quot; /&gt;"/>
+        
+        
+		<echo message="Creates cluster node '${cluster.node.two}'."/>
+		<copy todir="${as.home}/server/${cluster.node.two}" verbose="false" description="Copies all profile">
+			<fileset dir="${as.home}/server/all" excludes="**/data/**"/>
+		</copy>
+		
+		<delete dir="${as.home}/server/${cluster.node.two}/deploy/hornetq"/>
+		
+		<copy todir="${as.home}/server/${cluster.node.two}/deploy/hornetq">
+			<fileset dir="${basedir}/resources/hornetq-backup"/>
+		</copy>
+		
+		<copy tofile="${as.home}/bin/${cluster.node.two}.properties" file="./resources/bin/node-two.properties" overwrite="true"/>
+		
+		<echo message="Enableing admin user on node '${cluster.node.two}'."/>
+		<replace dir="${as.home}" token="#admin=admin" value="admin=admin">
+        	<include name="server/${cluster.node.two}/conf/props/jmx-console-users.properties"/>
+      	</replace>
+      	
+      	<echo message="Configuring XA recovery on node '${cluster.node.one}'."/>
+      	<replaceregexp file="${as.home}/server/${cluster.node.two}/conf/jbossts-properties.xml" 
+      	match="&lt;property\s*name=.com\.arjuna\.ats\.arjuna\.xa\.nodeIdentifier.\s*value=.1.\s*/&gt;" 
+      	replace="&lt;property name=&quot;com.arjuna.ats.arjuna.xa.nodeIdentifier&quot; value=&quot;${jboss.node.tx.id}&quot; /&gt;"/>
+        
+        <replaceregexp file="${as.home}/server/${cluster.node.two}/conf/jbossts-properties.xml"       
+        match="&lt;property\s*name=.com\.arjuna\.ats\.jta\.xaRecoveryNode.\s*value=.1.\s*/&gt;"
+        replace="&lt;property name=&quot;com.arjuna.ats.jta.xaRecoveryNode&quot; value=&quot;${jboss.node.tx.id}&quot; /&gt;"/>
+        
+    </target>
+
+
+    <target name="start-cluster" depends="validate-jboss" description="Starts HornetQ HA cluster.">
+		
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="true">
+			<arg line="run.sh -c ${cluster.node.one} -b ${cluster.bind.host.name} -g ${cluster.name} -u ${cluster.udp.address} -P ${cluster.node.one.properties.file}.properties" />
+		</exec>
+		
+		<sleep seconds="20"/>
+	
+		<echo message="Starting cluster node '${cluster.node.two}'"/>
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="true">
+			<arg line="run.sh -c ${cluster.node.two} -b ${cluster.bind.host.name} -g ${cluster.name} -u ${cluster.udp.address} -P ${cluster.node.two.properties.file}.properties" />
+		</exec> 
+    </target>
+
+
+    <target name="start-node-one" depends="validate-jboss" description="Starts node one of the cluster.">
+    	<echo message="Starting cluster node '${cluster.node.one}'"/>
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="true">
+			<arg line="run.sh -c ${cluster.node.one} -b ${cluster.bind.host.name} -g ${cluster.name} -u ${cluster.udp.address} -P ${cluster.node.one.properties.file}.properties" />
+		</exec>
+		
+    </target>
+    
+    <target name="start-node-two" depends="validate-jboss" description="Starts node two of the cluster.">
+    	<echo message="Starting cluster node '${cluster.node.one}'"/>
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="true">
+			<arg line="run.sh -c ${cluster.node.two} -b ${cluster.bind.host.name} -g ${cluster.name} -u ${cluster.udp.address} -P ${cluster.node.two.properties.file}.properties" />
+		</exec>
+    </target>
+    
+    <target name="stop-cluster" depends="validate-jboss" description="Stops HornetQ HA cluster.">
+	
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="false">
+			<arg line="shutdown.sh -S -s ${cluster.bind.host.name}:${cluster.bind.port-one} -u admin -p admin "/>
+		</exec>
+		
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="false">
+			<arg line="shutdown.sh -S -s ${cluster.bind.host.name}:${cluster.bind.port-two} -u admin -p admin "/>
+		</exec>
+	
+    </target>
+    
+     <target name="stop-node-one" depends="validate-jboss" description="Stops node one.">
+	
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="false">
+			<arg line="shutdown.sh -S -s ${cluster.bind.host.name}:${cluster.bind.port-one} -u admin -p admin "/>
+		</exec>
+	</target>
+	
+	<target name="stop-node-two" depends="validate-jboss" description="Stops node two.">
+	
+		<exec dir="${as.home}/bin" executable="sh" osfamily="unix" spawn="false">
+			<arg line="shutdown.sh -S -s ${cluster.bind.host.name}:${cluster.bind.port-two} -u admin -p admin "/>
+		</exec>
+	
+    </target>
+
+    <target name="reset-cluster" depends="validate-jboss" description="Deletes data log work tmp directories in all cluster nodes.">
+      
+		<delete dir="${as.home}/server/${cluster.node.one}/log"/>
+		<delete dir="${as.home}/server/${cluster.node.one}/tmp"/>
+		<delete dir="${as.home}/server/${cluster.node.one}/data"/>
+		<delete dir="${as.home}/server/${cluster.node.one}/work"/>
+			
+		<delete dir="${as.home}/server/${cluster.node.two}/log"/>
+		<delete dir="${as.home}/server/${cluster.node.two}/tmp"/>
+		<delete dir="${as.home}/server/${cluster.node.two}/data"/>
+		<delete dir="${as.home}/server/${cluster.node.two}/work"/>
+	
+		<delete  includeemptydirs="true">
+			<fileset dir="${cluster.shared.store}" includes="**/*" />
+		</delete>
+		
+    </target>
+    
+    <target name="delete-cluster" depends="validate-jboss" description="Deletes all cluster nodes.">
+      
+		<echo message="Deleting cluster '${cluster.node.one}'"/>
+		
+		<delete includeemptydirs="true">
+			  <fileset dir="${as.home}/server/${cluster.node.one}/" includes="**/*"/>
+		</delete>
+      
+      	<delete dir="${as.home}/server/${cluster.node.one}"/>
+      	
+		<echo message="Deleting cluster '${cluster.node.one}'"/>
+		
+		<delete includeemptydirs="true">
+			  <fileset dir="${as.home}/server/${cluster.node.two}/" includes="**/*"/>
+		</delete>
+		
+		<delete dir="${as.home}/server/${cluster.node.two}"/>
+		
+		<delete file="${as.home}/bin/${cluster.node.one}.properties"/>
+		<delete file="${as.home}/bin/${cluster.node.two}.properties"/>
+		
+		<delete  includeemptydirs="true">
+			<fileset dir="${cluster.shared.store}" includes="**/*" />
+		</delete>
+		
+	</target>
+
+</project> 
