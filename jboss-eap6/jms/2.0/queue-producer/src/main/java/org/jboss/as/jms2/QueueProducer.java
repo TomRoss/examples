@@ -3,6 +3,7 @@ package org.jboss.as.jms2;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
 import javax.jms.QueueConnectionFactory;
+import javax.jms.JMSProducer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -32,18 +33,19 @@ public class QueueProducer {
 
 
     private String hostName = System.getProperty("host.name","localhost");
-    private String bindPort = System.getProperty("bind.port","4447");
+    private String bindPort = System.getProperty("bind.port","8080");
     private String connectionFactoryName = System.getProperty("connection.factory", DEFAULT_CONNECTION_FACTORY_NAME);
     private String queueName = System.getProperty("queue.name",DEFAULT_QUEUE_NAME);
     private String userName = System.getProperty("username", DEFAULT_USERNAME);
     private String password =  System.getProperty("password", DEFAULT_PASSWORD);
-    private String providerUrl = "remote://" + hostName + ":" + bindPort;
+    private String providerUrl = "http-remoting://" + hostName + ":" + bindPort;
 
     private Hashtable<String,String> env = null;
     private InitialContext ctx = null;
 
     private QueueConnectionFactory qcf = null;
     private JMSContext jmsCtx = null;
+    private JMSProducer jmsProducer = null;
     private Queue queue = null;
 
     public QueueProducer(){
@@ -91,7 +93,8 @@ public class QueueProducer {
 
             MyMessage myMsg = new MyMessage(0,"This is my message to the world.");
 
-            jmsCtx.createProducer().send(queue,myMsg);
+            jmsProducer = jmsCtx.createProducer();
+                    //.send(queue,myMsg);
 
         } catch (Exception ex) {
 
