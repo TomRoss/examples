@@ -5,6 +5,8 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -28,8 +30,6 @@
     <orderEntry type="library" name="Maven: org.jboss.sasl:jboss-sasl:1.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-nio:3.1.0.CR3" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly:wildfly-build-config:8.0.0.Alpha4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>
 </module>
 

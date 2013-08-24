@@ -1,28 +1,27 @@
 package org.jboss.as.jms2;
 
 
-import javax.jms.JMSContext;
-import javax.jms.QueueConnectionFactory;
-//import javax.jms.JMSConsumer;
-import javax.jms.Message;
-import javax.jms.Queue;
+
+import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.Hashtable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
  * User: tomr
- * Date: 24/08/13
- * Time: 11:18
+ * Date: 24/08/2013
+ * Time: 14:28
  * To change this template use File | Settings | File Templates.
  */
-
-public class QueueConsumer {
-    private static final Logger log = Logger.getLogger(QueueConsumer.class.getName());
+public class AsynchQueueConsumer {
+    private static final Logger log = Logger.getLogger(AsynchQueueConsumer.class.getName());
+    private static CountDownLatch latch  = null;
 
     private static final String DEFAULT_MESSAGE = "Hello, World!";
     private static final String DEFAULT_CONNECTION_FACTORY_NAME = "jms/RemoteConnectionFactory";
@@ -31,7 +30,7 @@ public class QueueConsumer {
     private static final String DEFAULT_USERNAME = "quickuser";
     private static final String DEFAULT_PASSWORD = "quick123+";
     private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
-    private static final long RECIEVE_DELAY = 50000L;
+
 
     private String hostName = System.getProperty("host.name","localhost");
     private String bindPort = System.getProperty("bind.port","8080");
@@ -46,11 +45,14 @@ public class QueueConsumer {
 
     private QueueConnectionFactory qcf = null;
     private Queue queue = null;
-    private Message msg = null;
 
-    public QueueConsumer(){
+    public AsynchQueueConsumer(){
 
         try {
+
+            latch = new CountDownLatch(5);
+
+            log.info("Count down latch initialised to read 5 messages and terminate.");
 
             env = new Hashtable<String,String>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, INITIAL_CONTEXT_FACTORY);
@@ -85,30 +87,70 @@ public class QueueConsumer {
         }
     }
 
-    public void readMessage(){
+    public void readMessages(){
 
+        
         try (javax.jms.JMSContext jmsCtx = qcf.createContext(userName,password,JMSContext.AUTO_ACKNOWLEDGE);
-             javax.jms.JMSConsumer jmsConsumer = jmsCtx.createConsumer(queue)){
+             javax.jms.JMSConsumer jmsConsumer = jmsCtx.createConsumer(queue)) {
 
-            msg = jmsConsumer.receive(QueueConsumer.RECIEVE_DELAY);
+            log.info("JMS resources context and consumer have bee created.");
 
-            if (msg.isBodyAssignableTo(MyMessage.class)){
+            jmsConsumer.setMessageListener(new ObjectMessageListener());
 
-                MyMessage myMsg = msg.getBody(MyMessage.class);
+            try {
 
-                log.info("Received ObjectMessage.");
+                boolean s = latch.await(5, TimeUnit.MINUTES);
 
-                log.info("Message payload is '" + myMsg + "'.");
+                if (!s){
+
+                    log.warning("Latch timed out before reaching 0.");
+                }
+
+            } catch (InterruptedException e) {
+
+                log.warning("Ignoring InterruptedException");
+
+            }
+
+        } catch (JMSRuntimeException jmsEx) {
+
+            log.log(Level.SEVERE,"Error",jmsEx);
+        }
+
+    }
+
+    class ObjectMessageListener implements MessageListener {
+
+        @Override
+        public void onMessage(Message message) {
+
+
+            if (message instanceof ObjectMessage){
+
+
+                try {
+
+                    if (message.isBodyAssignableTo(MyMessage.class)){
+
+                        MyMessage myMsg = message.getBody(MyMessage.class);
+
+                        log.info("Received ObjectMessage '" + myMsg + "'.");
+
+                        latch.countDown();
+
+                    }
+
+                } catch (JMSException jmsEx){
+
+                    log.warning("Couldn't retrieve message body fom the message.");
+                }
+
+                log.info("Latch remaining count = " + latch.getCount());
 
             } else {
 
-                log.warning("Received wrong type of message.");
+                log.warning("Received wrong message type.");
             }
-
-        } catch (Exception ex) {
-
-            log.log(Level.SEVERE,"Error",ex);
         }
     }
-
 }

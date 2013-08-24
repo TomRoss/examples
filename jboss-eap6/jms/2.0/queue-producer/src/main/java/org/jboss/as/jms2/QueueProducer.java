@@ -87,9 +87,7 @@ public class QueueProducer {
 
     public void sendMessage(){
 
-        try {
-
-            jmsCtx = qcf.createContext(userName,password,JMSContext.AUTO_ACKNOWLEDGE);
+        try (JMSContext jmsCtx = qcf.createContext(userName,password,JMSContext.AUTO_ACKNOWLEDGE)) {
 
             MyMessage myMsg = new MyMessage(0,"This is my message to the world.");
 

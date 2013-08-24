@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jboss.as</groupId>
-    <artifactId>queue-consumer</artifactId>
+    <artifactId>asynch-queue-consumer</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>queue-consumer</name>
+    <name>asynch-queue-consumer</name>
 
     <developers>
         <developer>
@@ -24,7 +24,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-jms-client-bom</artifactId>
@@ -38,11 +37,9 @@
             <version>1.0.0.Alpha1</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
     <build>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -52,6 +49,12 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1-redhat-1</version>
             </plugin>
 
             <plugin>
@@ -71,9 +74,7 @@
                     <mainClass>org.jboss.as.jms2.Main</mainClass>
                 </configuration>
             </plugin>
-
         </plugins>
-
     </build>
 
 </project>
