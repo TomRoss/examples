@@ -1,0 +1,6 @@
+JBoss and HornetQ JMS2 examples.
+
+All examples use JMS2 API.
+
+queue-consumer - consumes a message from a queue synchronously  
+queue-producer - sends messages to a queue
