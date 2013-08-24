@@ -1,9 +1,6 @@
 package org.jboss.as.jms2;
 
-import javax.jms.JMSContext;
-import javax.jms.Queue;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.JMSProducer;
+import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,14 +11,13 @@ import java.util.logging.Logger;
 /**
  * Created with IntelliJ IDEA.
  * User: tomr
- * Date: 23/08/2013
- * Time: 15:47
+ * Date: 24/08/13
+ * Time: 11:18
  * To change this template use File | Settings | File Templates.
  */
 
-public class QueueProducer {
-
-    private static final Logger log = Logger.getLogger(QueueProducer.class.getName());
+public class QueueConsumer {
+    private static final Logger log = Logger.getLogger(QueueConsumer.class.getName());
 
     private static final String DEFAULT_MESSAGE = "Hello, World!";
     private static final String DEFAULT_CONNECTION_FACTORY_NAME = "jms/RemoteConnectionFactory";
@@ -30,7 +26,7 @@ public class QueueProducer {
     private static final String DEFAULT_USERNAME = "quickuser";
     private static final String DEFAULT_PASSWORD = "quick123+";
     private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
-
+    private static final long RECIEVE_DELAY = 50000L;
 
     private String hostName = System.getProperty("host.name","localhost");
     private String bindPort = System.getProperty("bind.port","8080");
@@ -45,10 +41,12 @@ public class QueueProducer {
 
     private QueueConnectionFactory qcf = null;
     private JMSContext jmsCtx = null;
-    private JMSProducer jmsProducer = null;
+    private JMSConsumer jmsConsumer = null;
     private Queue queue = null;
+    private ObjectMessage objMsg = null;
+    private Message msg = null;
 
-    public QueueProducer(){
+    public QueueConsumer(){
 
         try {
 
@@ -85,17 +83,32 @@ public class QueueProducer {
         }
     }
 
-    public void sendMessage(){
+    public void readMessage(){
 
         try {
 
             jmsCtx = qcf.createContext(userName,password,JMSContext.AUTO_ACKNOWLEDGE);
 
-            MyMessage myMsg = new MyMessage(0,"This is my message to the world.");
+            jmsConsumer = jmsCtx.createConsumer(queue);
 
-            jmsProducer = jmsCtx. createProducer().send(queue,myMsg);
+            msg = jmsConsumer.receive(QueueConsumer.RECIEVE_DELAY);
 
-            log.info("Message '" + myMsg + "' sent to destination '" + queue.getQueueName() + "'.");
+            if (msg instanceof ObjectMessage){
+
+                log.info("Received ObjectMessage.");
+
+                objMsg = (ObjectMessage) msg;
+
+                MyMessage myMsg = (MyMessage) objMsg.getObject();
+
+                log.info("Message playload is '" + myMsg + "'.");
+
+            }  else {
+
+                log.warning("Received wrong type of message.");
+            }
+
+
 
         } catch (Exception ex) {
 
