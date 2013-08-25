@@ -87,48 +87,12 @@ public class JMSClient implements Runnable {
 	}
 	
 	public void initConsumer() throws TestConsumerException, NamingException, JMSException {
-		
-		//qcf = conMgr.getObject(config.getProperty(Globals.CONNECTION_NAME_PROP));
+
         queueConnection = conMgr.getConnection();
-		//queue = conMgr.getObject(config.getProperty(Globals.QUEUE_NAME_PROP));
 
         queue = objMgr.getObject(Globals.queueName);
 
 	}
-	
-	/*public <T> T getObject(String url) throws TestConsumerException {
-		Object obj = null;
-		
-		try {
-			
-			lock.lock();
-			
-			ctx = new InitialContext(env);
-			
-			obj = ctx.lookup(url);		
-			
-		} catch (NamingException nEx) {
-			
-			throw new TestConsumerException("Got error while looking up object '" + url + "'.",nEx);
-			
-			
-		} finally{
-			
-			try {
-				
-				ctx.close();
-				
-			} catch (NamingException e) {
-				
-				logger.error("[" + threadName + "] Got exception while closing initial context.", e);
-					
-			}
-			
-			lock.unlock();
-		}
-		
-		return (T) obj;
-	}   */
 
 	
 	public void cleanUp() throws JMSException{

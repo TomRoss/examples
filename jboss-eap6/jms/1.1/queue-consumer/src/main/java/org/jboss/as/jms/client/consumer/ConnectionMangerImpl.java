@@ -4,12 +4,12 @@
  */
 package org.jboss.as.jms.client.consumer;
 
-import org.jboss.gss.jms.client.Globals;
+import org.jboss.as.jms.client.Globals;
 
 import javax.jms.JMSException;
 import javax.jms.QueueConnectionFactory;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+//import javax.naming.Context;
+//import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -25,14 +25,14 @@ import java.util.logging.Logger;
  */
 public class ConnectionMangerImpl implements ConnectionManager {
     private static final Logger logger = Logger.getLogger(ConnectionMangerImpl.class.getName());
-    private static final Lock lock = new ReentrantLock();
-    private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
-    private static final String PROVIDER_URL = "remote://localhost:4447";
-    private static InitialContext ctx = null;
+    //private static final Lock lock = new ReentrantLock();
+    //private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
+    //private static final String PROVIDER_URL = "remote://localhost:4447";
+    //private static InitialContext ctx = null;
 
     //private Globals globals = Globals.getGlobals();
 
-    private Hashtable<String,String> env = null;
+    //private Hashtable<String,String> env = null;
     private Properties config = null;
     private String conType = null;
     private String eapVer = null;
@@ -66,13 +66,7 @@ public class ConnectionMangerImpl implements ConnectionManager {
     }
 
     private <T> T getConnectionV6() throws NamingException, JMSException{
-        
-        /*env = new Hashtable<String,String>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, INITIAL_CONTEXT_FACTORY);
-        env.put(Context.PROVIDER_URL, "remote://" + config.getProperty(Globals.HOST_NAME_PROP) + ":" + config.getProperty(Globals.BIND_PORT_PORP));
-        env.put(Context.SECURITY_PRINCIPAL, System.getProperty("username", Globals.userName));
-        env.put(Context.SECURITY_CREDENTIALS, System.getProperty("password", Globals.userPassword));
-          */
+
         qcf = Globals.getGlobals().getObjectStore().getObject(Globals.connectionName);
         
         logger.log(Level.FINE,"Creating connection for host:bindPort '" + Globals.hostName + ":" + Globals.bindPort + "'.");
@@ -81,66 +75,17 @@ public class ConnectionMangerImpl implements ConnectionManager {
       
     }
     
-    private <T> T getConnectionV5(){
-     //env = new Hashtable<String,String>();
-                    
-                //env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.NamingContextFactory");
-                    
-                //env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
+    private <T> T getConnectionV5()  throws NamingException, JMSException {
 
-                //env.put(Context.PROVIDER_URL, "jnp://" + config.getProperty(Globals.HOST_NAME_PROP) + ":" + config.getProperty(Globals.BIND_PORT_PORP));
-                    
-                /*try {
-                    
-                    qcf = (QueueConnectionFactory) getObject(config.getProperty(Globals.CONNECTION_NAME_PROP));
-                            
-                    queue = (Queue) getObject(config.getProperty(Globals.QUEUE_NAME_PROP));
-                            
-                } catch (NamingException nameEx) {
-                            
-                    logger.log(Level.SEVERE,"Got naiming exception - " , nameEx);
-                            
-                    System.exit(-1);
-                    
-                } catch (Exception ex){
-                    
-                    logger.log(Level.SEVERE,"Got exception - " , ex);
-                    
-                    System.exit(-1);
-                } */
-        throw new UnsupportedOperationException("Not implemented yet");
+        qcf = Globals.getGlobals().getObjectStore().getObject(Globals.connectionName);
+
+        logger.log(Level.FINE,"Creating connection for host:bindPort '" + Globals.hostName + ":" + Globals.bindPort + "'.");
+
+        return (T) qcf.createQueueConnection(Globals.userName, Globals.userPassword);
+
     }
     
-    @Override
-    public <T> T getObject(String url) throws NamingException {
-        Object obj = null;
-		
-		try {
-			
-			lock.lock();
-			
-			ctx = new InitialContext(env);
-			
-            if (ctx != null){
-                            
-                obj = ctx.lookup(url);
-                            
-            }
-			
-		} finally{
-			
-            if ( ctx != null){
 
-                ctx.close();
-
-            }
-                    
-            lock.unlock();
-                    
-		}
-		
-		return (T) obj;
-    }
 
     
     public String toString(){

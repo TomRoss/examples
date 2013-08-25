@@ -24,14 +24,29 @@ public class ObjectStoreManager {
     private Hashtable env = null;
 
 
-    public ObjectStoreManager(){
+    public ObjectStoreManager(boolean isEap6){
 
         env = new Hashtable<String,String>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, Globals.INITIAL_CONTEXT_FACTORY);
-        env.put(Context.PROVIDER_URL, "remote://" + Globals.hostName + ":" + Globals.bindPort);
-        env.put(Context.SECURITY_PRINCIPAL, System.getProperty("username", Globals.userName));
-        env.put(Context.SECURITY_CREDENTIALS, System.getProperty("password", Globals.userPassword));
 
+        if (isEap6){
+
+
+            env.put(Context.INITIAL_CONTEXT_FACTORY, Globals.INITIAL_CONTEXT_FACTORY);
+
+            env.put(Context.PROVIDER_URL, "remote://" + Globals.hostName + ":" + Globals.bindPort);
+
+            env.put(Context.SECURITY_PRINCIPAL, System.getProperty("username", Globals.userName));
+
+            env.put(Context.SECURITY_CREDENTIALS, System.getProperty("password", Globals.userPassword));
+
+        } else {
+
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.NamingContextFactory");
+
+            env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
+
+            env.put(Context.PROVIDER_URL, "jnp://" + Globals.hostName + ":" + Globals.bindPort);
+        }
     }
 
     public <T> T getObject(String url) throws NamingException {

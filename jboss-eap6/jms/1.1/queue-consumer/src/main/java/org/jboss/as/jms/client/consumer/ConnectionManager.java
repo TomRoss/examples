@@ -14,6 +14,6 @@ import javax.naming.NamingException;
 public interface ConnectionManager {
  
     public <T> T getConnection() throws JMSException,NamingException;
-    public <T> T getObject(final String url) throws NamingException;
+    //public <T> T getObject(final String url) throws NamingException;
     
 }
