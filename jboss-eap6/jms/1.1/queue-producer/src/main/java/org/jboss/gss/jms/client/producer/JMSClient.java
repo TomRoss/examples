@@ -19,6 +19,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.logging.Logger;
 import org.jboss.gss.jms.client.Globals;
+import org.jboss.gss.jms.client.utils.ObjectStoreManager;
+import org.jboss.gss.jms.client.utils.TestConsumerException;
 
 public class JMSClient implements Runnable {
 	
@@ -55,51 +57,32 @@ public class JMSClient implements Runnable {
 	public String threadName = null;
 	
     public ConnectionManager conMgr = null;
-        
+
+    private ObjectStoreManager objMgr = null;
+
 	public JMSClient() {
 		
             config = new Properties();
-	        config.put(Globals.CONNECTION_TYPE_PROP,Globals.connectionType);
-            config.put(Globals.EAP_VERSION_PROP,Globals.eapVersion);
             config.put(Globals.HOST_NAME_PROP, Globals.hostName);
             config.put(Globals.BIND_PORT_PORP, Globals.bindPort);
             config.put(Globals.CONNECTION_NAME_PROP,Globals.connectionName);
             config.put(Globals.QUEUE_NAME_PROP, Globals.queueName);
             config.put(Globals.MESSAGE_COUNT_PROP, Globals.messageNumber);
-            
+
+            objMgr = globals.getObjectStore();
+
             conMgr = new ConnectionMangerImpl(config);
             
             logger.fine("JMSClient created.");
 	}
-	
-	/*public <T> T getObject(final String url) throws NamingException {
-		Object obj = null;
-		
-		try {
-			
-			lock.lock();
-			
-			ctx = new InitialContext(env);
-			
-                        //if (ctx != null){
-                            
-                            obj = ctx.lookup(url);		
-                            
-                        //} 
-			
-		} finally{
-			
-                    if ( ctx != null){
-                        ctx.close();
-                    }
-                    
-                    lock.unlock();
-                    
-		}
-		
-		return (T) obj;
-	}*/
 
+    public void initClient() throws TestConsumerException, NamingException, JMSException {
+
+        queueConnection = conMgr.createConnection();
+
+        queue = objMgr.getObject(Globals.queueName);
+
+    }
 	
 	public void cleanUp() throws JMSException{
 		
