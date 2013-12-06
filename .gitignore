@@ -4,6 +4,10 @@
 #
 .svn
 
+#
+# intelli IDE
+#
+.idea
 
 #
 # Complied files
