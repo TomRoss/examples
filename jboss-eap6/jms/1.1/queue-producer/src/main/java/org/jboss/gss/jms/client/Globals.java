@@ -1,5 +1,7 @@
 package org.jboss.gss.jms.client;
 
+import org.jboss.gss.jms.client.utils.ObjectStoreManager;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +20,9 @@ public class Globals {
 	private static final Lock countDownLock = new ReentrantLock();
 	
 	private static Globals globals = null;
-	
+
+    public static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
+
 	public static final long RECEIVE_TIME_OUT = 30000;
 	
 	public static final String HOST_NAME_PROP = "host.name";
@@ -36,17 +40,27 @@ public class Globals {
 	public static final String CONNECTION_NAME_PROP = "connection.name";
 	
 	public static final String connectionName = System.getProperty(Globals.CONNECTION_NAME_PROP, "jms/RemoteConnectionFactory");
-	
-    public static final String CONNECTION_TYPE_PROP = "connection.type";
-        
-    public static final String connectionType = System.getProperty(Globals.CONNECTION_TYPE_PROP, "queue");
         
 	public static final String MESSAGE_COUNT_PROP = "message.number";
 	
 	public static final String messageNumber = System.getProperty(Globals.MESSAGE_COUNT_PROP, "1");
-	
-	public static final String TOTAL_MESSAGE_COUNT_PROP = "TotalMessageCount";
-	
+
+    public static final String MESSAGE_THROW_EXCEPTION_PROP = "message.throw.exception";
+
+    public static final boolean msgThrowExc = Boolean.parseBoolean(System.getProperty(Globals.MESSAGE_THROW_EXCEPTION_PROP, "false"));
+
+    public static final String MESSAGE_DELAY_PROP = "message.delay";
+
+    public static final long msgDelay = Long.parseLong(System.getProperty(Globals.MESSAGE_DELAY_PROP, "0"));
+
+    public static final String MESSAGE_EXPIRE_PROP = "message.expire";
+
+    public static final long msgExpire = Long.parseLong(System.getProperty(Globals.MESSAGE_EXPIRE_PROP,"0"));
+
+    public static final int totalMsg = Integer.parseInt(messageNumber);
+
+    public static final String TOTAL_MESSAGE_COUNT_PROP = "TotalMessageCount";
+
 	public static final String NUMBER_OF_CLIENTS_PROP = "client.number";
 	
 	public static final String clientNumber = System.getProperty(Globals.NUMBER_OF_CLIENTS_PROP, "1");
@@ -60,24 +74,12 @@ public class Globals {
 	public static final String BATCH_SIZE_PROP = "btach.size";
 	
 	public static final int batchSize = Integer.parseInt(System.getProperty(Globals.BATCH_SIZE_PROP,"1"));
-	
-	public static final String MESSAGE_THROW_EXCEPTION_PROP = "message.throw.exception";
-		
-	public static final boolean msgThrowExc = Boolean.parseBoolean(System.getProperty(Globals.MESSAGE_THROW_EXCEPTION_PROP, "false"));
-	
-	public static final String MESSAGE_DELAY_PROP = "message.delay";
-	
-	public static final long msgDelay = Long.parseLong(System.getProperty(Globals.MESSAGE_DELAY_PROP, "0"));
-	
-    public static final String EAP_VERSION_PROP = "eap.version";
+
+    public static final String USER_NAME_PROP = "username";
         
-    public static final String eapVersion = System.getProperty(Globals.EAP_VERSION_PROP, "EAP6");
+    public static final String userName = System.getProperty(Globals.USER_NAME_PROP, "quickuser");
         
-    public static final String USER_NAME_PROP = "hq.user.name";
-        
-    public static final String userName = System.getProperty(Globals.USER_NAME_PROP, "guest");
-        
-    public static final String USER_PASSWORD_PROP = "hq.user.password";
+    public static final String USER_PASSWORD_PROP = "password";
         
     public static final String userPassword = System.getProperty(Globals.USER_PASSWORD_PROP, "quick123+");
         
@@ -86,11 +88,15 @@ public class Globals {
 	public static int exitStatus = 0;
 	
 	private static ExecutorService executor = null;
-	
+
+    private ObjectStoreManager objMgr = null;
+
 	public Globals() {
 		
-            executor = Executors.newFixedThreadPool(clientCnt);
-		
+        executor = Executors.newFixedThreadPool(clientCnt);
+
+        objMgr = new ObjectStoreManager();
+
 	}
 	
 	public static Globals getGlobals() {
@@ -142,4 +148,9 @@ public class Globals {
 		
 		return executor;
 	}
+
+    public ObjectStoreManager getObjectStore(){
+
+        return this.objMgr;
+    }
 }
