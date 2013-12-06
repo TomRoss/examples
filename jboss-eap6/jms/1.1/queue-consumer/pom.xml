@@ -12,8 +12,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jboss.as.jms</groupId>
-    <artifactId>queue-consumer</artifactId>
+    <groupId>org.jboss.gss.jms</groupId>
+    <artifactId>jms-queue-consumer</artifactId>
     <version>7.2-SNAPSHOT</version>
     <name>${project.artifactId}-${project.version}</name>
     <description>JMS Queue message producer</description>
@@ -42,7 +42,7 @@
         <!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered 
             resources, i.e. build is platform dependent! -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.wildfly>8.0.0.Alpha4</version.wildfly>
+
         <!-- JBoss dependency versions -->
         <version.org.jboss.as>7.2.0.Final-redhat-8</version.org.jboss.as>
         <version.org.jboss.spec.jboss.javaee.6.0>3.0.2.Final-redhat-3</version.org.jboss.spec.jboss.javaee.6.0>
@@ -58,7 +58,6 @@
         <!-- maven-compiler-plugin -->
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
-
     </properties>
 
    
@@ -67,16 +66,10 @@
         <dependency>
             <groupId>org.jboss.as</groupId>
             <artifactId>jboss-as-jms-client-bom</artifactId>
-            <version>7.2.0.Final</version>
+            <version>${version.org.jboss.as}</version>
             <type>pom</type>
         </dependency>
-
-        <dependency>
-            <groupId>org.jboss.spec.javax.jms</groupId>
-            <artifactId>jboss-jms-api_1.1_spec</artifactId>
-            <version>1.0.1.Final-redhat-2</version>
-            <scope>compile</scope>
-        </dependency>
+            
     </dependencies>
 
     <build>
@@ -98,7 +91,7 @@
                 <configuration>
                     <executable>java</executable>
                     <workingDirectory>${project.build.directory}/exec-working-directory</workingDirectory>
-                    <mainClass>org.jboss.as.jms.client.Main</mainClass>
+                    <mainClass>org.jboss.gss.jms.client.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
