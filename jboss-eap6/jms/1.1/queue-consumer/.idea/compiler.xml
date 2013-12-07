@@ -23,9 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="jms-queue-consumer" />
+        <module name="queue-consumer" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.7" />
+    <bytecodeTargetLevel target="1.7">
+      <module name="queue-consumer" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 
