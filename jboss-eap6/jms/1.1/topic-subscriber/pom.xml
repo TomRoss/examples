@@ -44,7 +44,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.wildfly>8.0.0.Alpha4</version.wildfly>
         <!-- JBoss dependency versions -->
-        <version.org.jboss.as>7.2.0.Final-redhat-8</version.org.jboss.as>
+        <version.org.jboss.as>7.3.0.Final-redhat-14</version.org.jboss.as>
         <version.org.jboss.spec.jboss.javaee.6.0>3.0.2.Final-redhat-3</version.org.jboss.spec.jboss.javaee.6.0>
 		
         <version.org.jboss.bom>1.0.4.Final-redhat-4</version.org.jboss.bom>
