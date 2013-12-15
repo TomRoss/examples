@@ -43,9 +43,7 @@ public class ConnectionMangerImpl implements ConnectionManager {
         env.put(Context.SECURITY_PRINCIPAL, Globals.userName);
         env.put(Context.SECURITY_CREDENTIALS, Globals.userPassword);
 
-        conType = config.getProperty(Globals.CONNECTION_TYPE_PROP);
-
-        logger.fine("Connection manager created. Connection type '" + conType + "' EAP Ver '" + eapVer + "'.");
+        logger.fine("Connection manager created with configuration '" + this.toString() + "'.");
     }
     
     @Override

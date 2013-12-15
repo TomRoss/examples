@@ -16,13 +16,13 @@ public class Main {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		
-		logger.info("<<< Starting Simple JMS Queue Producer >>>");
+		logger.info("<<< Starting Simple JMS Topic Publisher >>>");
 		
 		Client client = new Client();
 		
 		client.runClient();
 		
-		logger.info("<<< shutting down Simple JMS Queue Producer >>>");
+		logger.info("<<< Shutting down Simple JMS Topic Publisher >>>");
 		
 		System.exit(Globals.exitStatus);
 	}

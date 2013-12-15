@@ -14,7 +14,7 @@
 
     <groupId>org.jboss.as.jms</groupId>
     <artifactId>jms-topic-publisher</artifactId>
-    <version>7.2-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>${project.artifactId}-${project.version}</name>
     <description>JMS Queue message producer</description>
     <packaging>jar</packaging>

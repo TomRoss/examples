@@ -32,27 +32,27 @@ public class JMSTopicPublisher extends JMSClient {
 		
 		try {
 			
-                    topicConnection = conMgr.getConnection();
+            topicConnection = conMgr.getConnection();
                         
-                    topic = conMgr.getObject(Globals.topicName);
+            topic = conMgr.getObject(Globals.topicName);
                         
-                    if (Globals.sessionTransacted){
+            if (Globals.sessionTransacted){
 				
-                        topicSession = topicConnection.createTopicSession(true,Session.SESSION_TRANSACTED);
+                topicSession = topicConnection.createTopicSession(true,Session.SESSION_TRANSACTED);
 				
-                    } else {
+            } else {
 			
-			            topicSession = topicConnection.createTopicSession(false,Session.AUTO_ACKNOWLEDGE);
+			    topicSession = topicConnection.createTopicSession(false,Session.AUTO_ACKNOWLEDGE);
 				
-                    }
+            }
 						
-                    topicPublisher = topicSession.createPublisher(topic);
+            topicPublisher = topicSession.createPublisher(topic);
 			
-                    textMsg = topicSession.createTextMessage();
+            textMsg = topicSession.createTextMessage();
 			
-                    startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
 			
-                    while (true){
+            while (true){
 				
 				textMsg.setText(String.format(messageText,i,hName,messageCount));
 				
@@ -103,31 +103,34 @@ public class JMSTopicPublisher extends JMSClient {
 			
 		} catch (JMSException jmsEx) {
 			
-                    logger.log(Level.SEVERE,"[" + threadName + "] Got JMS Exception - ",jmsEx);
+            logger.log(Level.SEVERE,"[" + threadName + "] Got JMS Exception - ",jmsEx);
 			
 		} catch (InterruptedException interp){
 			// ignore this
 		} catch (Exception ex){
 			
-                    logger.log(Level.SEVERE,"[" + threadName + "] Got Exception - ",ex);
+            logger.log(Level.SEVERE,"[" + threadName + "] Got Exception - ",ex);
 			
 		} finally {
 		
 			
-                    try {
+            try {
 			
-                        cleanUp();
+                cleanUp();
 				
-                        logger.info("[" + threadName + "] Producer finished.");
+                logger.info("[" + threadName + "] Producer finished.");
 				
-                        globals.countDown();
+
 				
 			} catch (JMSException jmsEx) {
 				
-                            logger.log(Level.SEVERE,"[" + threadName + "] Got JMS Exception - ",jmsEx);
+                logger.log(Level.SEVERE,"[" + threadName + "] Got JMS Exception - ",jmsEx);
 				
-			}
-		}
+			}   finally {
+
+                globals.countDown();
+            }
+        }
 		 
 		
 	}

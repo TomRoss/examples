@@ -52,7 +52,6 @@ public class JMSClient implements Runnable {
 	public JMSClient() {
 		
             config = new Properties();
-	        config.put(Globals.CONNECTION_TYPE_PROP,Globals.connectionType);
             config.put(Globals.HOST_NAME_PROP, Globals.hostName);
             config.put(Globals.BIND_PORT_PORP, Globals.bindPort);
             config.put(Globals.CONNECTION_NAME_PROP,Globals.connectionName);
@@ -85,6 +84,7 @@ public class JMSClient implements Runnable {
 		if ( topicSession != null){
 			
 			topicSession.close();
+
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("Session closed.");
 		}
@@ -92,9 +92,13 @@ public class JMSClient implements Runnable {
 		if ( topicConnection != null){
 						
 			topicConnection.close();
+
 			if (logger.isLoggable(Level.FINE))
 				logger.fine("connection closed.");
 		}
+
+        logger.log(Level.INFO,"JMS resources cleaned up.");
+
 	}
 
 	public void results(String threadName, long time,long messageCnt){
