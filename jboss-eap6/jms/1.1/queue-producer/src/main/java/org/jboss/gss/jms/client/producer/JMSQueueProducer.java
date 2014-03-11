@@ -7,13 +7,13 @@ import javax.jms.Message;
 import javax.jms.DeliveryMode;
 import java.util.logging.Logger;
 import org.jboss.gss.jms.client.Globals;
-
+import org.jboss.gss.jms.client.utils.UserProperties;
 
 
 public class JMSQueueProducer extends JMSClient {
 	private static final Logger logger = Logger.getLogger(JMSQueueProducer.class.getName());
 	private final int messageCount = Integer.parseInt(config.getProperty(Globals.MESSAGE_COUNT_PROP));
-	
+
 	
 	public JMSQueueProducer() {
             
@@ -26,11 +26,15 @@ public class JMSQueueProducer extends JMSClient {
 		
 		int i = 1;
 		String messageText = JMSClient.MESSAGE_TEXT;
-		String hName = config.getProperty(Globals.HOST_NAME_PROP);
 		threadName = Thread.currentThread().getName();
 		
 		logger.info("<<< Starting producer thread [" + threadName + "] >>>");
-		
+
+        up.put(Globals.MESSAGE_THROW_EXCEPTION_PROP_NAME,new Boolean(true));
+        up.put(Globals.JMSX_DELIVERY_COUNT_PROP,new Integer(0));
+        up.put(Globals.TOTAL_MESSAGE_COUNT_PROP,new Integer(0));
+
+
 		try {
 			
                     //queueConnection = conMgr.getConnection();
@@ -50,22 +54,26 @@ public class JMSQueueProducer extends JMSClient {
             queueSender = queueSession.createSender(queue);
 			
             textMsg = queueSession.createTextMessage();
-			
+
+            //textMsg.setObjectProperty("UserProperties",up);
+
             startTime = System.currentTimeMillis();
 			
             while (true){
 				
-				textMsg.setText(String.format(messageText,i,hName,messageCount));
-				
+				textMsg.setText(String.format(messageText,i,Globals.localHostName,messageCount));
+
+                UserProperties up = new UserProperties();
+
 				textMsg.setIntProperty(Globals.TOTAL_MESSAGE_COUNT_PROP, Globals.totalMsg);
 
 				if ( i == 5 && Globals.msgThrowExc){
 
-					textMsg.setBooleanProperty("throwException",true);
+					textMsg.setBooleanProperty(Globals.MESSAGE_THROW_EXCEPTION_PROP_NAME,true);
 
 				} else {
 
-					textMsg.setBooleanProperty("throwException",false);
+					textMsg.setBooleanProperty(Globals.MESSAGE_THROW_EXCEPTION_PROP_NAME,false);
 
 				}
 				
