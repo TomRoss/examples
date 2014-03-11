@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import org.jboss.gss.jms.client.Globals;
 import org.jboss.gss.jms.client.utils.ObjectStoreManager;
 import org.jboss.gss.jms.client.utils.TestConsumerException;
+import org.jboss.gss.jms.client.utils.UserProperties;
 
 public class JMSClient implements Runnable {
 	
@@ -58,7 +59,11 @@ public class JMSClient implements Runnable {
 	
     public ConnectionManager conMgr = null;
 
+    public UserProperties up = null;
+
     private ObjectStoreManager objMgr = null;
+
+
 
 	public JMSClient() {
 		
@@ -74,6 +79,10 @@ public class JMSClient implements Runnable {
             conMgr = new ConnectionMangerImpl(config);
             
             logger.fine("JMSClient created.");
+
+            up = new UserProperties();
+
+
 	}
 
     public void initClient() throws TestConsumerException, NamingException, JMSException {
