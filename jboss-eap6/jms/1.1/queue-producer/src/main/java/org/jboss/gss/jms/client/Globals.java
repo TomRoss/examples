@@ -2,6 +2,8 @@ package org.jboss.gss.jms.client;
 
 import org.jboss.gss.jms.client.utils.ObjectStoreManager;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -35,7 +37,7 @@ public class Globals {
 	
 	public static final String QUEUE_NAME_PROP = "queue.name";
 	
-	public static final String queueName = System.getProperty(Globals.QUEUE_NAME_PROP, "jms/queue/testQueue");
+	public static final String queueName = System.getProperty(Globals.QUEUE_NAME_PROP, "/jms/queue/testQueue");
 	
 	public static final String CONNECTION_NAME_PROP = "connection.name";
 	
@@ -46,6 +48,10 @@ public class Globals {
 	public static final String messageNumber = System.getProperty(Globals.MESSAGE_COUNT_PROP, "1");
 
     public static final String MESSAGE_THROW_EXCEPTION_PROP = "message.throw.exception";
+
+    public static final String MESSAGE_THROW_EXCEPTION_PROP_NAME = "ThrowException";
+
+    public static final String JMSX_DELIVERY_COUNT_PROP = "JMSXDeliveryCount";
 
     public static final boolean msgThrowExc = Boolean.parseBoolean(System.getProperty(Globals.MESSAGE_THROW_EXCEPTION_PROP, "false"));
 
@@ -82,7 +88,9 @@ public class Globals {
     public static final String USER_PASSWORD_PROP = "password";
         
     public static final String userPassword = System.getProperty(Globals.USER_PASSWORD_PROP, "quick123+");
-        
+
+    public static String localHostName = null;
+
 	public static final CountDownLatch latch = new CountDownLatch(clientCnt);
 	
 	public static int exitStatus = 0;
@@ -97,6 +105,14 @@ public class Globals {
 
         objMgr = new ObjectStoreManager();
 
+        try {
+
+            localHostName = InetAddress.getLocalHost().getHostName();
+
+        }  catch (UnknownHostException ex){
+
+            logger.warning("Can't obtain host name.");
+        }
 	}
 	
 	public static Globals getGlobals() {
