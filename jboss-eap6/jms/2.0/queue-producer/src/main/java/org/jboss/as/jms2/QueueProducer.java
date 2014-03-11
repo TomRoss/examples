@@ -1,9 +1,6 @@
 package org.jboss.as.jms2;
 
-import javax.jms.JMSContext;
-import javax.jms.Queue;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.JMSProducer;
+import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -91,7 +88,9 @@ public class QueueProducer {
 
             MyMessage myMsg = new MyMessage(0,"This is my message to the world.");
 
-            jmsProducer = jmsCtx. createProducer().send(queue,myMsg);
+            TextMessage txtMsg = jmsCtx.createTextMessage("Hello There");
+
+            jmsProducer = jmsCtx.createProducer().send(queue,txtMsg);
 
             log.info("Message '" + myMsg + "' sent to destination '" + queue.getQueueName() + "'.");
 
