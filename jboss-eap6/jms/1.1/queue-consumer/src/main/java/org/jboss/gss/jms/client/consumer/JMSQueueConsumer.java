@@ -90,7 +90,12 @@ public class JMSQueueConsumer extends JMSClient {
 							
 						}
 					}
-					
+
+                    if ( Globals.sessionTransacted && ((  i % Globals.batchSize ) == 0)){
+
+                        queueSession.commit();
+                    }
+
 				} else if ( message == null){
 					
 					logger.info("[" + threadName + "] Receive() method timed out after '" + (Globals.receiveTimeOut/1000) + "' seconds.");
