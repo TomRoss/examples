@@ -53,3 +53,6 @@ Thumbs.db
 .idea
 target
 >>>>>>> 5c9b0313f2b696781948c74889d7f3eec5e18919
+/jboss-eap6/MyTest/nbproject/private/
+/jboss-eap6/MyTest/build/
+/jboss-eap6/MyTest/dist/

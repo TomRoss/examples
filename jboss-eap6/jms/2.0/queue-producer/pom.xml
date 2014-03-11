@@ -12,21 +12,21 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <version.wildfly>8.0.0.Alpha4</version.wildfly>
+    <version.wildfly>8.0.0.CR1</version.wildfly>
   </properties>
 
   <dependencies>
     <dependency>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-jms-client-bom</artifactId>
-        <version>${version.wildfly}</version>
+        <version>8.0.0.CR1</version>
         <type>pom</type>
     </dependency>
 
     <dependency>
         <groupId>org.jboss.spec.javax.jms</groupId>
         <artifactId>jboss-jms-api_2.0_spec</artifactId>
-        <version>1.0.0.Alpha1</version>
+        <version>1.0.0.Final</version>
         <scope>compile</scope>
     </dependency>
 
