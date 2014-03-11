@@ -40,11 +40,11 @@ import javax.jms.TextMessage;
 
 @MessageDriven(name = "HelloWorldRemoteQueueMDB", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-    @ActivationConfigProperty(propertyName = "destination", propertyValue = "jms/tomr.testQueue"),
+    @ActivationConfigProperty(propertyName = "destination", propertyValue = "testQueue"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
     @ActivationConfigProperty(propertyName = "useJNDI", propertyValue = "false"),
     @ActivationConfigProperty(propertyName = "connectorClassName", propertyValue = "org.hornetq.core.remoting.impl.netty.NettyConnectorFactory"),
-    @ActivationConfigProperty(propertyName = "connectionParameters", propertyValue = "host=ragga;port=5445"),
+    @ActivationConfigProperty(propertyName = "connectionParameters", propertyValue = "${my.remote.location}"),
     @ActivationConfigProperty(propertyName = "user", propertyValue = "quickuser"),
     @ActivationConfigProperty(propertyName = "password",propertyValue = "quick123+")
 

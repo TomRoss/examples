@@ -23,11 +23,10 @@ import javax.ejb.MessageDrivenContext;
  */
 @MessageDriven(name = "HelloWorldTopicMDB", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "jms/tomr.testTopic"),
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "testTopic"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
-        @ActivationConfigProperty(propertyName = "useJNDI", propertyValue = "false"),
         @ActivationConfigProperty(propertyName = "connectorClassName", propertyValue = "org.hornetq.core.remoting.impl.netty.NettyConnectorFactory"),
-        @ActivationConfigProperty(propertyName = "connectionParameters", propertyValue = "host=ragga;port=5445"),
+        @ActivationConfigProperty(propertyName = "connectionParameters", propertyValue = "host=localhost;port=5545"),
         @ActivationConfigProperty(propertyName = "useJNDI", propertyValue = "false"),
         @ActivationConfigProperty(propertyName = "user",propertyValue = "quickuser"),
         @ActivationConfigProperty(propertyName = "password",propertyValue = "quick123+"),
