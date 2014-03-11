@@ -7,7 +7,7 @@ import javax.jms.Message;
 import javax.jms.DeliveryMode;
 import java.util.logging.Logger;
 import org.jboss.gss.jms.client.Globals;
-import org.jboss.gss.jms.client.utils.UserProperties;
+//import org.jboss.gss.jms.client.utils.UserProperties;
 
 
 public class JMSQueueProducer extends JMSClient {
@@ -36,10 +36,6 @@ public class JMSQueueProducer extends JMSClient {
 
 
 		try {
-			
-                    //queueConnection = conMgr.getConnection();
-                        
-                    //queue = conMgr.getObject(Globals.queueName);
                         
             if (Globals.sessionTransacted){
 				
@@ -55,15 +51,13 @@ public class JMSQueueProducer extends JMSClient {
 			
             textMsg = queueSession.createTextMessage();
 
-            //textMsg.setObjectProperty("UserProperties",up);
-
             startTime = System.currentTimeMillis();
 			
             while (true){
 				
 				textMsg.setText(String.format(messageText,i,Globals.localHostName,messageCount));
 
-                UserProperties up = new UserProperties();
+                //UserProperties up = new UserProperties();
 
 				textMsg.setIntProperty(Globals.TOTAL_MESSAGE_COUNT_PROP, Globals.totalMsg);
 
@@ -120,7 +114,9 @@ public class JMSQueueProducer extends JMSClient {
             logger.log(Level.SEVERE,"[" + threadName + "] Got JMS Exception - ",jmsEx);
 			
 		} catch (InterruptedException interp){
-			// ignore this
+
+			logger.log(Level.WARNING,"This thread has been interruped.",interp);
+
 		} catch (Exception ex){
 			
             logger.log(Level.SEVERE,"[" + threadName + "] Got Exception - ",ex);
