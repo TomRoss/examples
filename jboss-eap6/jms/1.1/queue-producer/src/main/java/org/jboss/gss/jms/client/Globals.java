@@ -100,7 +100,12 @@ public class Globals {
     private ObjectStoreManager objMgr = null;
 
 	public Globals() {
-		
+
+        if (Boolean.parseBoolean(System.getProperty("help","false"))){
+            printHelp();
+            System.exit(0);
+        }
+
         executor = Executors.newFixedThreadPool(clientCnt);
 
         objMgr = new ObjectStoreManager();
@@ -108,6 +113,8 @@ public class Globals {
         try {
 
             localHostName = InetAddress.getLocalHost().getHostName();
+
+            logger.fine("Client running on host '" + localHostName + "'.");
 
         }  catch (UnknownHostException ex){
 
@@ -168,5 +175,26 @@ public class Globals {
     public ObjectStoreManager getObjectStore(){
 
         return this.objMgr;
+    }
+
+    public void printHelp(){
+
+        logger.info("************************************");
+        logger.info("mvn exec:java -D[property=value]");
+        logger.info("List of properties with [default values]:");
+        logger.info("\thost.name - message broker host name. [localhost]");
+        logger.info("\tbind.port - message broker port number. [4447]");
+        logger.info("\tmessage.number - number of message to send. [1]");
+        logger.info("\tmessage.delay - deploy between each message send [0].");
+        logger.info("\tmessage.throw.exception - throw exception when consuming message (only MDB).");
+        logger.info("\tmessage.expire - expire message after. [0]");
+        logger.info("\tusername - user name. [quickuser]");
+        logger.info("\tpassword - user password. [quick123+]");
+        logger.info("\tconnection.name - connection factory name. [jms/RemoteConnectionFactory]");
+        logger.info("\tqueue.name - queue name. [jms/queue/testQueue]");
+        logger.info("\tclient.number - number of JMS clients. [1]");
+        logger.info("\tsession.transacted - is the JMS session transacted. [false]");
+        logger.info("\tbtach.size - transaction batch size. [1]");
+        logger.info("************************************");
     }
 }
