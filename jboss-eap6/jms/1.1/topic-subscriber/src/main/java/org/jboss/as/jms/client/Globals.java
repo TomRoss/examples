@@ -140,4 +140,23 @@ public class Globals {
 		
 		return executor;
 	}
+
+    public void printHelp(){
+
+        logger.info("************************************");
+        logger.info("mvn exec:java -D[property=value]");
+        logger.info("List of properties:");
+        logger.info("\thost.name");
+        logger.info("\tbind.port");
+        logger.info("\tmessage.number");
+        logger.info("\tmessage.delay");
+        logger.info("\tmessage.throw.exception");
+        logger.info("\tusername");
+        logger.info("\tpassword");
+        logger.info("\tconnection.name");
+        logger.info("\ttopic.name");
+        logger.info("\tclient.number");
+        logger.info("\tsession.transacted");
+        logger.info("************************************");
+    }
 }

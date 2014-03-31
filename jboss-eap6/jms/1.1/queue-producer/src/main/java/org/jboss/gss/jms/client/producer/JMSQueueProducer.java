@@ -61,6 +61,12 @@ public class JMSQueueProducer extends JMSClient {
 
 				textMsg.setIntProperty(Globals.TOTAL_MESSAGE_COUNT_PROP, Globals.totalMsg);
 
+                if (Globals.messageGroup != null){
+
+                    textMsg.setStringProperty("JMSXGroupID",Globals.messageGroup);
+
+                }
+
 				if ( i == 5 && Globals.msgThrowExc){
 
 					textMsg.setBooleanProperty(Globals.MESSAGE_THROW_EXCEPTION_PROP_NAME,true);

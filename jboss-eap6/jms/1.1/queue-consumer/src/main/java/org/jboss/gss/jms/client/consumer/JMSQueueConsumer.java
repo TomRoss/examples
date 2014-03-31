@@ -51,20 +51,24 @@ public class JMSQueueConsumer extends JMSClient {
 			
 			logger.info("[" + threadName + "] Connection started. Starting receiving messages.");
 			
-			startTime = System.currentTimeMillis();
+			//startTime = System.currentTimeMillis();
 			
 			while (true){
 				
 				message = queueReceiver.receive(Globals.receiveTimeOut);
-				
+
+                if ( startTime == 0){
+                    startTime = System.currentTimeMillis();
+                }
+
 				if (message != null && message instanceof TextMessage){
 				
 					int msgCnt = message.getIntProperty(Globals.TOTAL_MESSAGE_COUNT_PROP);
 					
 				    textMsg = (TextMessage) message;
 						
-					logger.info("[" + threadName + "] Messages '" + i + "' consumed. Message text '" + textMsg.getText() + "'.");
-					logger.info("[" + threadName + "] Message count property = '" + msgCnt +"'.");
+					//logger.info("[" + threadName + "] Messages '" + i + "' consumed. Message text '" + textMsg.getText() + "'.");
+					//logger.info("[" + threadName + "] Message count property = '" + msgCnt +"'.");
 						
 					
 					if ( i == messageCount){
@@ -77,7 +81,12 @@ public class JMSQueueConsumer extends JMSClient {
 					i++;
 					
 					messagesReceived = i;
-					
+
+                    if  ((  i % Globals.batchSize ) == 0){
+                        logger.info("[" + threadName + "] Messages '" + i + "' consumed. Message text '" + textMsg.getText() + "'.");
+                        logger.info("[" + threadName + "] Message count property = '" + msgCnt +"'.");
+                    }
+
 					if ( Globals.messageDelay != 0){
 						
 						try {

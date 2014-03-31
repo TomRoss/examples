@@ -67,6 +67,10 @@ public class Globals {
 
     public static final String TOTAL_MESSAGE_COUNT_PROP = "TotalMessageCount";
 
+    public static final String MESSAGE_GROUP_PROP = "message.group";
+
+    public static final String messageGroup = System.getProperty(Globals.MESSAGE_GROUP_PROP,null);
+
 	public static final String NUMBER_OF_CLIENTS_PROP = "client.number";
 	
 	public static final String clientNumber = System.getProperty(Globals.NUMBER_OF_CLIENTS_PROP, "1");
@@ -188,6 +192,7 @@ public class Globals {
         logger.info("\tmessage.delay - deploy between each message send [0].");
         logger.info("\tmessage.throw.exception - throw exception when consuming message (only MDB).");
         logger.info("\tmessage.expire - expire message after. [0]");
+        logger.info("\tmessage.group - sets the value of JMSXGroupID");
         logger.info("\tusername - user name. [quickuser]");
         logger.info("\tpassword - user password. [quick123+]");
         logger.info("\tconnection.name - connection factory name. [jms/RemoteConnectionFactory]");

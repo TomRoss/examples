@@ -63,7 +63,7 @@ public class Globals {
 	
 	public static final boolean sessionTransacted = Boolean.parseBoolean(System.getProperty(Globals.SESSION_TRANSACTED_PROP, "false"));
 	
-	public static final String BATCH_SIZE_PROP = "btach.size";
+	public static final String BATCH_SIZE_PROP = "batch.size";
 
     public static final int batchSize = Integer.parseInt(System.getProperty(Globals.BATCH_SIZE_PROP,"1"));
 
@@ -167,7 +167,7 @@ public class Globals {
         logger.info("\tqueue.name - queue name. [jms/queue/testQueue]");
         logger.info("\tclient.number - number of JMS clients. [1]");
         logger.info("\tsession.transacted - is the JMS session transacted. [false]");
-        logger.info("\tbtach.size - transaction batch size. [1]");
+        logger.info("\tbatch.size - transaction batch size. [1]");
         logger.info("************************************");
     }
 }
