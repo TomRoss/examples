@@ -67,7 +67,9 @@ public class JMSQueueProducer extends JMSClient {
 
                 }
 
-				if ( i == 5 && Globals.msgThrowExc){
+				if ( Globals.msgThrowExc){
+
+                    logger.info("Message will throw runtime exception.");
 
 					textMsg.setBooleanProperty(Globals.MESSAGE_THROW_EXCEPTION_PROP_NAME,true);
 

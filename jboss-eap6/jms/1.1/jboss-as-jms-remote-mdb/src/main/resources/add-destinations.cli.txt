@@ -1,0 +1,4 @@
+jms-queue add --queue-address=testQueueRA --entries=[java:jboss/exported/jms/queue/testQueueRA,java:jboss/jms/queue/testQueueRA]
+jms-topic add --topic-address=testTopicRA --entries=[java:jboss/exported/jms/topic/testTopicRA,java:jboss/jms/topic/testTopicRA]
+jms-queue add --queue-address=testQueue --entries=[java:jboss/exported/jms/queue/testQueue,java:jboss/jms/queue/testQueue]
+jms-topic add --topic-address=testTopic --entries=[java:jboss/exported/jms/topic/testTopic,java:jboss/jms/topic/testTopic]

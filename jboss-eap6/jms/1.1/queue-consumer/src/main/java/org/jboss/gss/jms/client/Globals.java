@@ -159,7 +159,7 @@ public class Globals {
         logger.info("\thost.name - message broker host name. [localhost]");
         logger.info("\tbind.port - message broker port number. [4447]");
         logger.info("\tmessage.number - number of message to send. [1]");
-        logger.info("\tmessage.delay - deploy between each message receive [0].");
+        logger.info("\tmessage.delay - delay between each message receive [0].");
         logger.info("\tmessage.throw.exception - throw exception when consuming message (only MDB).");
         logger.info("\tusername - user name. [quickuser]");
         logger.info("\tpassword - user password. [quick123+]");

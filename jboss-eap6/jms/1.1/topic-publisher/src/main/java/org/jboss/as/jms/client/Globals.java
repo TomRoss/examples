@@ -33,11 +33,11 @@ public class Globals {
 	
 	public static final String TOPIC_NAME_PROP = "topic.name";
 	
-	public static final String topicName = System.getProperty(Globals.TOPIC_NAME_PROP, "jms/topic/testTopic");
+	public static final String topicName = System.getProperty(Globals.TOPIC_NAME_PROP, "/jms/topic/testTopic");
 	
 	public static final String CONNECTION_NAME_PROP = "connection.name";
 	
-	public static final String connectionName = System.getProperty(Globals.CONNECTION_NAME_PROP, "jms/RemoteConnectionFactory");
+	public static final String connectionName = System.getProperty(Globals.CONNECTION_NAME_PROP, "/jms/RemoteConnectionFactory");
 	
     //public static final String CONNECTION_TYPE_PROP = "connection.type";
         
@@ -73,7 +73,7 @@ public class Globals {
         
     public static final String USER_NAME_PROP = "username";
         
-    public static final String userName = System.getProperty(Globals.USER_NAME_PROP, "guest");
+    public static final String userName = System.getProperty(Globals.USER_NAME_PROP, "quickuser");
         
     public static final String USER_PASSWORD_PROP = "password";
         

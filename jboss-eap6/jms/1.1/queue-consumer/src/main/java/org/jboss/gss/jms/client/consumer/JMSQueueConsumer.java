@@ -51,13 +51,12 @@ public class JMSQueueConsumer extends JMSClient {
 			
 			logger.info("[" + threadName + "] Connection started. Starting receiving messages.");
 			
-			//startTime = System.currentTimeMillis();
-			
 			while (true){
 				
 				message = queueReceiver.receive(Globals.receiveTimeOut);
 
                 if ( startTime == 0){
+                    // first message received get current time
                     startTime = System.currentTimeMillis();
                 }
 
@@ -113,7 +112,7 @@ public class JMSQueueConsumer extends JMSClient {
 					
 				} else {
 					
-					logger.log(Level.WARNING,"[" + threadName + "] Received unknow message type. Ignoring.");
+					logger.log(Level.WARNING,"[" + threadName + "] Received unknown message type. Ignoring.");
 					
 					break;
 					
