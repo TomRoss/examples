@@ -13,7 +13,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jboss.hornetq</groupId>
+    <groupId>org.jboss.interceptor</groupId>
     <artifactId>interceptor</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
@@ -29,7 +29,6 @@
     </licenses>
 
     <properties>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -73,6 +72,14 @@
             <artifactId>hornetq-core-client</artifactId>
             <version>2.3.12.Final-redhat-1</version>
         </dependency>
+       
+        <dependency>
+            <groupId>org.hornetq</groupId>
+            <artifactId>hornetq-server</artifactId>
+            <version>2.3.12.Final-redhat-1</version>
+            <scope>provided</scope>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -98,8 +105,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>

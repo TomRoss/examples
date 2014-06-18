@@ -21,13 +21,11 @@ import org.jboss.ejb3.annotation.ResourceAdapter;
 
 @MessageDriven(name = "VerySimpleMDB", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "TEST.QUEUE"),
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "IN.QUEUE"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")
-        //@ActivationConfigProperty(propertyName = "useJNDI",propertyValue = "false"),
-        //@ActivationConfigProperty(propertyName = "hA", propertyValue = "true")
 })
 
-@ResourceAdapter("amq-ra")
+//@ResourceAdapter("amq-ra")
 public class VerySimpleMDB implements MessageListener {
     private static final Logger log = Logger.getLogger(VerySimpleMDB.class.getName());
     private static final String mdbName = "very-simple-queue-mdb";
@@ -42,11 +40,13 @@ public class VerySimpleMDB implements MessageListener {
 
     @Resource(mappedName = "java:jboss/jms/activemq/ConnectionFactory")
     private ConnectionFactory cf;
+    @Resource(mappedName = "java:jboss/jms/amq/queue/outQueue")
+    private Queue outQueue;
+
     private Connection con;
     private Session session;
     private MessageProducer msgProducer;
-    @Resource(mappedName = "java:jboss/jms/amq/queue/outQueue")
-    private Queue outQueue;
+
 
     private int totalMsgCnt = 0;
     private boolean throwException = false;
@@ -76,18 +76,7 @@ public class VerySimpleMDB implements MessageListener {
 
                 msgProducer.send(txtMsg);
 
-                //dumpMessage(message);
-
-                if (throwException){
-
-                    throw new RuntimeException("This is a dummy exception thrown from onMessage() method.");
-                }
-
-            } else if (message instanceof ObjectMessage){
-
-                objMsg = (ObjectMessage) message;
-
-                log.info("MDB[" + mdbName + ":" + mdbID + "] Got object message of class '" + objMsg.getObject().getClass().getName() + "'.");
+                log.info("Message '" + txtMsg.getText() + "' sent to '" + outQueue.getQueueName() + "'.");
 
             }  else {
 
@@ -147,42 +136,6 @@ public class VerySimpleMDB implements MessageListener {
     public void cleanUp(){
         log.info("MDB[" + mdbName + ":" + mdbID + "] Processed " + msgCnt + " messages.");
         log.info("MDB[" + mdbName + ":" + mdbID + "] Closing.");
-    }
-
-    private void dumpMessage(Message message) throws JMSException {
-
-
-        log.log(Level.INFO,"JMS Properties: -");
-        log.log(Level.INFO,"\tJMSMessageID = '" + message.getJMSMessageID() + "'.");
-        log.log(Level.INFO,"\tJMSCorrelationID() = '" + message.getJMSCorrelationID() + "'.");
-        log.log(Level.INFO,"\tJMSDeliveryMode() = '" + message.getJMSDeliveryMode() + "'.");
-        log.log(Level.INFO,"\tJMSDestination() = '" + message.getJMSDestination() + "'.");
-        log.log(Level.INFO,"\tJMSExpiration() = '" + message.getJMSExpiration() + "'.");
-        log.log(Level.INFO,"\tJMSPriority() = '" + message.getJMSPriority() + "'.");
-        log.log(Level.INFO,"\tJMSRedelivered() = '" + message.getJMSRedelivered() + "'.");
-        log.log(Level.INFO,"\tJMSReplyTo() = '" + message.getJMSReplyTo() + "'.");
-        log.log(Level.INFO,"\tJMSTimestamp = '" + message.getJMSTimestamp() + "'.");
-        log.log(Level.INFO,"\tJMSType = '" + message.getJMSType() + "'.");
-
-        log.log(Level.INFO,"User Properties: -");
-
-        if ( message instanceof TextMessage){
-
-            TextMessage txtMsg = (TextMessage) message;
-
-            Enumeration<String> e = txtMsg.getPropertyNames();
-
-            while (e.hasMoreElements()){
-
-                String s = e.nextElement();
-
-                log.info("\tProperty name '" + s + "'.");
-
-                //message.getP
-
-            }
-        }
-
     }
 
 }

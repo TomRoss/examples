@@ -31,7 +31,6 @@ import org.jboss.ejb3.annotation.ResourceAdapter;
 
 
 @ResourceAdapter("org.jboss.genericjms")
-//@ResourceAdapter("generic-jms-ra-jar-1.0.1.Final-redhat-1.jar")
 public class SimpleTibcoMDB implements MessageListener {
     private static final Logger log = Logger.getLogger(SimpleTibcoMDB.class.getName());
     private static final String mdbName = "very-simple-tibco-mdb";
