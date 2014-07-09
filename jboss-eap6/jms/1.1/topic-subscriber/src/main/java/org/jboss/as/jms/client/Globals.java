@@ -33,7 +33,7 @@ public class Globals {
 	
 	public static final String TOPIC_NAME_PROP = "topic.name";
 	
-	public static final String topicName = System.getProperty(Globals.TOPIC_NAME_PROP, "jms/topic/testTopic");
+	public static final String topicName = System.getProperty(Globals.TOPIC_NAME_PROP, "/jms/topic/testTopic");
 	
 	public static final String CONNECTION_NAME_PROP = "connection.name";
 	
@@ -71,11 +71,11 @@ public class Globals {
 	
 	public static final long msgDelay = Long.parseLong(System.getProperty(Globals.MESSAGE_DELAY_PROP, "0"));
         
-    public static final String USER_NAME_PROP = "hq.user.name";
+    public static final String USER_NAME_PROP = "username";
         
-    public static final String userName = System.getProperty(Globals.USER_NAME_PROP, "guest");
+    public static final String userName = System.getProperty(Globals.USER_NAME_PROP, "quickuser");
         
-    public static final String USER_PASSWORD_PROP = "hq.user.password";
+    public static final String USER_PASSWORD_PROP = "password";
         
     public static final String userPassword = System.getProperty(Globals.USER_PASSWORD_PROP, "quick123+");
         
@@ -86,8 +86,13 @@ public class Globals {
 	private static ExecutorService executor = null;
 	
 	public Globals() {
-		
-            executor = Executors.newFixedThreadPool(clientCnt);
+
+        if (Boolean.parseBoolean(System.getProperty("help","false"))){
+            printHelp();
+            System.exit(0);
+        }
+
+        executor = Executors.newFixedThreadPool(clientCnt);
 		
 	}
 	
