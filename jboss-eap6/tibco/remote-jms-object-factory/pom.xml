@@ -4,7 +4,7 @@
 
   <groupId>org.jboss.genericjms</groupId>
   <artifactId>remote-jms-factory</artifactId>
-  <version>1.01</version>
+  <version>1.03</version>
   <packaging>jar</packaging>
 
     <developers>
@@ -17,6 +17,7 @@
 
   <name>remote-jms-factory</name>
   <url>http://maven.apache.org</url>
+  <description>Remote Object Factory - to retrieve object from remote JNDI registry </description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,8 +27,30 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>2.4</version>
+              <configuration>
+                  <finalName>${project.artifactId}</finalName>
+              </configuration>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.1</version>
+              <configuration>
+                  <source>1.7</source>
+                  <target>1.7</target>
+              </configuration>
+          </plugin>
+      </plugins>
+  </build>
 </project>
