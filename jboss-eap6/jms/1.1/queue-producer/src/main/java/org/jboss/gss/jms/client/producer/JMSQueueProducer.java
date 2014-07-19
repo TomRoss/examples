@@ -130,8 +130,7 @@ public class JMSQueueProducer extends JMSClient {
             logger.log(Level.SEVERE,"[" + threadName + "] Got Exception - ",ex);
 			
 		} finally {
-		
-			
+
             try {
 			
                 cleanUp();

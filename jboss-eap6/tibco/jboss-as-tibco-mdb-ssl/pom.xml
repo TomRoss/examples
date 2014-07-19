@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.jboss.tibco.mdb</groupId>
-  <artifactId>jboss-as-jms-tibco</artifactId>
+  <artifactId>jboss-as-jms-tibco-ssl</artifactId>
   <version>1.0</version>
   <packaging>pom</packaging>
 
@@ -49,7 +49,7 @@
         
         <dependency>
             <groupId>org.jboss.tibco.mdb</groupId>
-            <artifactId>jboss-as-jms-tibco-mdb</artifactId>
+            <artifactId>jboss-as-jms-tibco-mdb-ssl</artifactId>
             <version>1.0</version>
         </dependency>
         

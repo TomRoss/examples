@@ -28,7 +28,7 @@ public class JMSClient implements MessageListener {
     
     private ConnectionFactory cf = null;
     private Connection con = null;
-    @Resource(mappedName = "java:jboss/jms/topic/testTopic")
+    //@Resource(mappedName = "java:jboss/jms/topic/testTopic")
     private Topic topic;
     private TopicSubscriber subscriber;
     private TopicSession session = null;

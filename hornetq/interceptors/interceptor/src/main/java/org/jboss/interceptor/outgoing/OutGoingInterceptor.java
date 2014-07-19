@@ -44,9 +44,9 @@ public class OutGoingInterceptor implements Interceptor
       SessionSendMessage realPacket = null;
       Message msg = null;
       
-      /*log.info("OutGoing::Processing packet: " + packet.getClass().getName() + " that camme from " + connection.getRemoteAddress() +".");
+      log.info("OutGoing::Processing packet: " + packet.getClass().getName() + " that camme from " + connection.getRemoteAddress() +".");
       
-      log.info("OutGoing::RemotingConnection: " + connection.getRemoteAddress() + " with client ID = " + connection.getID());
+      /* log.info("OutGoing::RemotingConnection: " + connection.getRemoteAddress() + " with client ID = " + connection.getID());
 
       if (packet instanceof SessionSendMessage)
       {

@@ -33,7 +33,7 @@ public class InComingInterceptor implements Interceptor{
       
       log.info("InComming::Processing packet: " + packet.getClass().getName() + " that camme from " + connection.getRemoteAddress() +".");
       
-      RemotingConnectionImpl impl = (RemotingConnectionImpl) connection;
+      /*RemotingConnectionImpl impl = (RemotingConnectionImpl) connection;
       ChannelImpl channel = (ChannelImpl) impl.getChannel(packet.getChannelID(), -1);
       
       ChannelHandler ch = channel.getHandler();
@@ -53,7 +53,7 @@ public class InComingInterceptor implements Interceptor{
           log.info("Meta data = " + ss.getMetaData(null));
       }
       
-      if ( packet instanceof CreateSessionMessage){
+      if ( packet instanceof CreateSessionMessage){ */
           
          /* log.info("===== Create session message ========");
           
@@ -70,7 +70,7 @@ public class InComingInterceptor implements Interceptor{
           log.info( "User Name = " + getUsername(packet, connection)); */
           
           
-      } else if (packet instanceof SessionAcknowledgeMessage){
+      //} else if (packet instanceof SessionAcknowledgeMessage){
          
           /*log.info("===== Session Ack message ========");
           
@@ -88,7 +88,7 @@ public class InComingInterceptor implements Interceptor{
           
           log.info("Packet handler - " + channel.getHandler().getClass().getName());*/
           
-      } else if ( packet instanceof SessionSendMessage){
+      //} else if ( packet instanceof SessionSendMessage){
           
           /*log.info("===== Session Send message ========");
           
@@ -102,7 +102,7 @@ public class InComingInterceptor implements Interceptor{
           log.info("Message ID = " + sendPacket.getMessage());
           
           log.info("RemotingConnection: " + connection.getRemoteAddress() + " with client ID = " + connection.getID()); */
-      }
+      //}
       
       
       return true;
@@ -110,19 +110,19 @@ public class InComingInterceptor implements Interceptor{
     
     public String getUsername(final Packet packet, final RemotingConnection connection)
    {
-        RemotingConnectionImpl impl = (RemotingConnectionImpl) connection;
-        ChannelImpl channel = (ChannelImpl) impl.getChannel(packet.getChannelID(), -1);
+        //RemotingConnectionImpl impl = (RemotingConnectionImpl) connection;
+        //ChannelImpl channel = (ChannelImpl) impl.getChannel(packet.getChannelID(), -1);
         
-        log.info("Packet handler class = " + channel.getHandler().getClass().getName());
+        //log.info("Packet handler class = " + channel.getHandler().getClass().getName());
         
-        ChannelHandler ch = channel.getHandler();
+        //ChannelHandler ch = channel.getHandler();
         
-        if (ch instanceof HornetQPacketHandler ){
+        //if (ch instanceof HornetQPacketHandler ){
            
-           HornetQPacketHandler hqPh = (HornetQPacketHandler) ch;
+           //HornetQPacketHandler hqPh = (HornetQPacketHandler) ch;
            
            //hqPh.
-        }
+        //}
         
         // ServerSessionPacketHandler sessionHandler = (ServerSessionPacketHandler) channel.getHandler();
         

@@ -16,9 +16,9 @@ import java.util.logging.Logger;
  * Created by tomr on 20/12/13.
  */
 
-@MessageDriven(name = "VerySimpleMDB", activationConfig = {
+@MessageDriven(name = "VerySimpleTopicMDB", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "inTopic"),
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "testTopic"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
         @ActivationConfigProperty(propertyName = "useJNDI",propertyValue = "false"),
         //@ActivationConfigProperty(propertyName = "clientID", propertyValue = "quickuser"),
@@ -28,8 +28,8 @@ import java.util.logging.Logger;
         @ActivationConfigProperty(propertyName = "hA", propertyValue = "true")
 },mappedName = "java:jboss/jms/topic/testTopic")
 
-public class VerySimpleMDB implements MessageListener {
-    private static final Logger log = Logger.getLogger(VerySimpleMDB.class.getName());
+public class VerySimpleTopicMDB implements MessageListener {
+    private static final Logger log = Logger.getLogger(VerySimpleTopicMDB.class.getName());
     private static final String mdbName = "very-simple-topic-mdb";
     private static AtomicInteger mdbCnt = new AtomicInteger(0);
     private int msgCnt = 0;
@@ -49,7 +49,7 @@ public class VerySimpleMDB implements MessageListener {
     private int totalMsgCnt = 0;
     private boolean throwException = false;
 
-    public VerySimpleMDB(){
+    public VerySimpleTopicMDB(){
         mdbCnt.incrementAndGet();
         mdbID = mdbCnt.get();
     }

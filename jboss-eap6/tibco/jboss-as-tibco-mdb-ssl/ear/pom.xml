@@ -7,11 +7,11 @@
 
     <parent>
         <groupId>org.jboss.tibco.mdb</groupId>
-        <artifactId>jboss-as-jms-tibco</artifactId>
+        <artifactId>jboss-as-jms-tibco-ssl</artifactId>
         <version>1.0</version>
     </parent>
 
-    <artifactId>jboss-as-jms-tibco-ear</artifactId>
+    <artifactId>jboss-as-jms-tibco-ssl-ear</artifactId>
 
     <packaging>ear</packaging>
 
@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>org.jboss.tibco.mdb</groupId>
-            <artifactId>jboss-as-jms-tibco-mdb</artifactId>
+            <artifactId>jboss-as-jms-tibco-mdb-ssl</artifactId>
             <scope>compile</scope>
         </dependency>
     </dependencies>
