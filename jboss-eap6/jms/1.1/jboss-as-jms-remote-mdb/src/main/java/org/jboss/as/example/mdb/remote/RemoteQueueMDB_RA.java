@@ -42,17 +42,18 @@ import java.util.logging.Logger;
 
 @MessageDriven(name = "RemoteQueueMDBRA", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-    @ActivationConfigProperty(propertyName = "destination", propertyValue = "testQueueRA"),
+    @ActivationConfigProperty(propertyName = "destination", propertyValue = "/jms/jboss/testQueue"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
     @ActivationConfigProperty(propertyName = "useJNDI", propertyValue = "true"),
-    //@ActivationConfigProperty(propertyName = "connectorClassName", propertyValue = "org.hornetq.core.remoting.impl.netty.NettyConnectorFactory"),
-    //@ActivationConfigProperty(propertyName = "connectionParameters", propertyValue = "${my.remote.location}"),
-    //@ActivationConfigProperty(propertyName = "user", propertyValue = "quickuser"),
-    //@ActivationConfigProperty(propertyName = "password",propertyValue = "quick123+")
+    @ActivationConfigProperty(propertyName = "connectorClassName", propertyValue = "org.hornetq.core.remoting.impl.netty.NettyConnectorFactory"),
+    @ActivationConfigProperty(propertyName = "connectionParameters", propertyValue = "host=localhost;port=5545"),
+    @ActivationConfigProperty(propertyName = "jndiParams", propertyValue = "java.naming.factory.initial=org.jboss.naming.remote.client.InitialContextFactory;java.naming.provider.url=remote://localhost:4547"),
+    @ActivationConfigProperty(propertyName = "user", propertyValue = "quickuser"),
+    @ActivationConfigProperty(propertyName = "password",propertyValue = "quick123+")
 
-},mappedName = "java:jboss/jms/queue/testQueueRA")
+},mappedName = "java:jboss/jms/queue/testQueue")
 
-@ResourceAdapter("remote-hornetq-ra")
+//@ResourceAdapter("remote-hornetq-ra")
 
 public class RemoteQueueMDB_RA implements MessageListener {
 
